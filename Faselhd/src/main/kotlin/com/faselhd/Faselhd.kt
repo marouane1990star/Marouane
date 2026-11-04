@@ -60,7 +60,8 @@ import com.lagradost.cloudstream3.newMovieSearchResponse
 class FASELHD(private val context: Context) : MainAPI() {
     override var name = "FASELHD"
     override val hasQuickSearch = true
-    override var mainUrl = "https://web31312x.faselhdx.bid"
+    // تم تحديث الرابط هنا
+    override var mainUrl = "https://faselhd.channel"
     override var lang = "ar"
     override val hasMainPage = true
     override val supportedTypes = setOf(TvType.Movie, TvType.TvSeries, TvType.Anime)
@@ -835,44 +836,4 @@ class FASELHD(private val context: Context) : MainAPI() {
             if (caughtM3u8List.isEmpty()) continue
 
             val iframeUri = try { Uri.parse(iframeUrl) } catch (e: Exception) { null }
-            val iframeOrigin = if (iframeUri != null && iframeUri.host != null) "${iframeUri.scheme}://${iframeUri.host}" else iframeUrl
-
-            caughtM3u8List.forEach { m3u8Url ->
-                val streamCookies = cm.getCookie(m3u8Url) ?: cm.getCookie(iframeUrl) ?: ""
-                val streamHeaders = mutableMapOf(
-                    "User-Agent" to lastValidUserAgent,
-                    "Referer" to iframeUrl,
-                    "Origin" to iframeOrigin
-                )
-                if (streamCookies.isNotBlank()) {
-                    streamHeaders["Cookie"] = streamCookies
-                }
-
-                val (qName, qValue) = when {
-                    m3u8Url.contains("1080") -> "1080p" to Qualities.P1080.value
-                    m3u8Url.contains("720") -> "720p" to Qualities.P720.value
-                    m3u8Url.contains("480") -> "480p" to Qualities.P480.value
-                    m3u8Url.contains("360") -> "360p" to Qualities.P360.value
-                    m3u8Url.contains("master") -> "Auto" to Qualities.Unknown.value
-                    else -> "Server ${index + 1}" to Qualities.Unknown.value
-                }
-
-                callback(
-                    newExtractorLink(
-                        source = name,
-                        name = "$name - Server ${index + 1} ($qName)",
-                        url = m3u8Url,
-                        type = ExtractorLinkType.M3U8
-                    ) {
-                        this.referer = iframeUrl
-                        this.quality = qValue
-                        this.headers = streamHeaders
-                    }
-                )
-                totalExtractedLinks++
-            }
-        }
-
-        return totalExtractedLinks > 0
-    }
-}
+            val iframeOrigin = if (iframeUri != null && iframeUri.host != null
