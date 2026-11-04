@@ -60,7 +60,6 @@ import com.lagradost.cloudstream3.newMovieSearchResponse
 class FASELHD(private val context: Context) : MainAPI() {
     override var name = "FASELHD"
     override val hasQuickSearch = true
-    // تم تحديث الرابط هنا
     override var mainUrl = "https://faselhd.channel"
     override var lang = "ar"
     override val hasMainPage = true
